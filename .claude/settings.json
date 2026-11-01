@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./data/raw/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Grep|Glob|Edit|Write|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe",
+            "args": [
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-File",
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/block-raw-data.ps1"
+            ],
+            "onFailure": "block"
+          }
+        ]
+      }
+    ]
+  }
+}
