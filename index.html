@@ -120,6 +120,8 @@
     .tab:hover { color: var(--text); }
     .tab[aria-selected="true"] { background: var(--surface); color: var(--text); border-color: var(--border); }
 
+    .note { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.85rem; }
+
     .result-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
     .total-label { margin: 0; color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
     .total { margin: 0; font-family: var(--mono); font-size: 3rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; }
@@ -169,7 +171,7 @@
     }
     @media print {
       body { background: #fff; color: #000; }
-      header, #upload-card, .tabs, .toolbar, #panel-summary, .vehicle-head .ghost { display: none !important; }
+      header, #upload-card, .tabs, .note, .toolbar, #panel-summary, .vehicle-head .ghost { display: none !important; }
       #panel-vehicles { display: block !important; }
       .card { border: 0; box-shadow: none; background: none; padding: 0; }
       h3 { color: #000; }
@@ -224,6 +226,8 @@
         <button id="tab-vehicles" class="tab" type="button" role="tab" aria-controls="panel-vehicles" aria-selected="false" tabindex="-1">Viaturas</button>
       </div>
 
+      <p id="filter-note" class="note" hidden></p>
+
       <div id="panel-summary" role="tabpanel" aria-labelledby="tab-summary">
         <p id="summary-error" class="error" role="alert" hidden></p>
         <div id="summary-content">
@@ -268,6 +272,7 @@
     const error = document.getElementById("error");
     const results = document.getElementById("results");
     const tabs = [...document.querySelectorAll(".tab")];
+    const filterNote = document.getElementById("filter-note");
     const summaryError = document.getElementById("summary-error");
     const summaryContent = document.getElementById("summary-content");
     const totalOutput = document.getElementById("total");
@@ -291,7 +296,16 @@
       }));
       pyodide.runPython(`
 from summary.count import count_calls, format_summary
+from summary.csv_reader import UNIT_MARKER, count_rows
 from summary.vehicles import group_by_vehicle
+
+
+def filter_report(content):
+    try:
+        kept, ignored = count_rows(bytes(content.to_py()))
+    except KeyError as error:
+        return {"missing_column": error.args[0]}
+    return {"kept": kept, "ignored": ignored, "marker": UNIT_MARKER}
 
 
 def summarize(content):
@@ -324,6 +338,7 @@ def list_vehicles(content):
       return {
         summarize: pyodide.globals.get("summarize"),
         listVehicles: pyodide.globals.get("list_vehicles"),
+        filterReport: pyodide.globals.get("filter_report"),
       };
     }
 
@@ -520,6 +535,14 @@ def list_vehicles(content):
       vehiclesOutput.replaceChildren(...vehiclesState.map(buildVehicle));
     }
 
+    function renderFilterNote(report) {
+      filterNote.hidden = Boolean(report.missing_column);
+      if (filterNote.hidden) return;
+      const { kept, ignored, marker } = report;
+      filterNote.textContent = `${kept + ignored} chamadas lidas · ${kept} da unidade ${marker} · `
+        + `${ignored} de outras unidades ignoradas`;
+    }
+
     function showMissingColumn(errorElement, contentElement, column) {
       errorElement.textContent = `Coluna ${column} não encontrada.`;
       errorElement.hidden = false;
@@ -529,10 +552,11 @@ def list_vehicles(content):
     okButton.addEventListener("click", async () => {
       resetOutput();
       try {
-        const { summarize, listVehicles } = await summaryReady;
+        const { summarize, listVehicles, filterReport } = await summaryReady;
         const content = new Uint8Array(await fileInput.files[0].arrayBuffer());
         const summary = toJs(summarize(content));
         const vehicles = toJs(listVehicles(content));
+        renderFilterNote(toJs(filterReport(content)));
         if (summary.missing_column) {
           showMissingColumn(summaryError, summaryContent, summary.missing_column);
         } else {

@@ -34,6 +34,20 @@ def test_call_without_resource_is_ignored():
     assert not any("TRES" in address for address in addresses)
 
 
+def test_vehicles_of_other_units_are_not_listed():
+    grouped = group_by_vehicle(SAMPLE.read_bytes())
+    addresses = [trip.address for trips in grouped.values() for trip in trips]
+    assert "CCC0003" not in grouped
+    assert not any("OUTRA UNIDADE" in address for address in addresses)
+
+
+def test_unit_filter_ignores_letter_case():
+    grouped = group_by_vehicle(SAMPLE.read_bytes())
+    assert "RUA TESTE QUATRO, Nº 4 - BAIRRO TESTE" in [
+        trip.address for trip in grouped["BBB0002"]
+    ]
+
+
 def test_trips_are_sorted_by_departure_time():
     grouped = group_by_vehicle(SAMPLE.read_bytes())
     assert [trip.departure for trip in grouped["AAA0001"]] == [

@@ -15,7 +15,11 @@ Duas páginas chamam a mesma lógica de `summary/`:
 ## Regra de negócio
 
 - Entrada: CSV do CAD, separador `;`, codificação Windows-1252 (não é UTF-8).
-- Todas as linhas contam como chamada atendida. Nenhuma é excluída.
+- Só entram as linhas cuja coluna `Unidade Responsável` contém `(PASSOS)`, sem
+  diferenciar maiúscula de minúscula (exemplo: `1CIA IND/2CIA/1PEL(PASSOS)`
+  entra; `1CIA IND/1CIA/1PEL` não). O filtro vale para o resumo e para as
+  viaturas, e a página informa quantas linhas foram ignoradas.
+- Toda linha que entra conta como chamada atendida. Nenhuma outra é excluída.
 - A categoria é a primeira letra da coluna `Natureza`
   (exemplo: `P02004 - VISTORIA ...` conta como `P`).
 - Saída: uma linha `Total: N`, seguida de uma linha `LETRA - N` por categoria.
