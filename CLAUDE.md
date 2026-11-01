@@ -17,7 +17,7 @@
 
 ## Commits
 
-- Mensagem em português, no imperativo, primeira linha até 72 caracteres.
+- Mensagem em inglês, no imperativo, primeira linha até 72 caracteres.
 - Prefixos: `feat:`, `fix:`, `docs:`, `test:`, `chore:`.
 - Nunca faça `git push` sem pedido explícito.
 - Nunca inclua dado real de ocorrência na mensagem.

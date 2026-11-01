@@ -10,7 +10,7 @@ disable-model-invocation: true
 2. Rode `powershell -NoProfile -ExecutionPolicy Bypass -File ./verify.ps1` e mostre a saída real. Se falhar, pare, explique o erro e não prossiga para o commit.
 3. Rode `git diff --stat` e resuma a mudança em uma ou duas frases.
 4. Proponha a mensagem de commit e espere a aprovação:
-   - português, no imperativo, primeira linha com até 72 caracteres;
+   - inglês, no imperativo, primeira linha com até 72 caracteres;
    - prefixo `feat:`, `fix:`, `docs:`, `test:` ou `chore:`;
    - sem dado real de ocorrência;
    - termina com a linha de coautoria definida pelo ambiente.
