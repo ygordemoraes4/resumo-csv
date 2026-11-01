@@ -2,8 +2,15 @@
 
 ## O que é este projeto
 
-resumo-csv: app local (Streamlit) que lê a planilha de chamadas exportada do CAD
-do Corpo de Bombeiros e mostra o consolidado. Uso diário, por uma pessoa.
+resumo-csv: app que lê a planilha de chamadas exportada do CAD do Corpo de
+Bombeiros e mostra o consolidado. Uso diário, por uma pessoa.
+
+Duas páginas chamam a mesma lógica de `summary/`:
+
+- `app.py`: página local em Streamlit (`run.bat`).
+- `index.html`: página estática no GitHub Pages. Roda o Python no navegador com
+  Pyodide (v314.0.7, via CDN jsDelivr); a planilha é processada no computador de
+  quem usa.
 
 ## Regra de negócio
 
@@ -27,10 +34,13 @@ do Corpo de Bombeiros e mostra o consolidado. Uso diário, por uma pessoa.
 - Nunca leia, copie, commite nem coloque dado real em teste, log ou mensagem de commit.
 - Planilhas reais ficam em `data/raw/`, fora do Git.
 - Testes usam só arquivos fictícios em `tests/fixtures/`.
+- Nenhuma página pode enviar a planilha, ou parte dela, a um servidor. A
+  `index.html` só faz requisições para o Pyodide e para `summary/count.py`.
 
 ## Convenções
 
-- A lógica de contagem não depende do Streamlit. A página só chama a lógica.
+- A lógica de contagem não depende do Streamlit nem do navegador. As páginas só
+  chamam a lógica; a regra existe só em `summary/`.
 - Nomes no código (arquivos, funções, variáveis, testes) em inglês; interface e documentação em português.
 - Exceção: `Natureza` é o nome da coluna do CSV do CAD e não muda.
 
