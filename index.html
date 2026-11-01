@@ -36,7 +36,7 @@
       line-height: 1.5;
     }
 
-    main { max-width: 42rem; margin: 0 auto; padding: 3rem 1rem 4rem; }
+    main { max-width: 76rem; margin: 0 auto; padding: 3rem 1rem 4rem; }
 
     header { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 2rem; }
     .logo {
@@ -46,7 +46,9 @@
       color: #06101c;
     }
     h1 { margin: 0; font-size: 1.5rem; letter-spacing: -0.02em; }
+    h3 { margin: 0; font-family: var(--mono); font-size: 1.05rem; color: var(--accent); }
     .subtitle { margin: 0; color: var(--muted); font-size: 0.9rem; }
+    .muted { color: var(--muted); font-size: 0.85rem; }
 
     .card {
       background: var(--surface);
@@ -56,6 +58,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     }
     .card + .card { margin-top: 1rem; }
+    .narrow { max-width: 42rem; margin-left: auto; margin-right: auto; }
 
     .status {
       display: flex; align-items: center; gap: 0.6rem;
@@ -95,7 +98,7 @@
       border-radius: 10px; border: 1px solid transparent; padding: 0.6rem 1.4rem;
       transition: transform 0.1s, filter 0.15s, background 0.15s;
     }
-    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #06101c; }
     .primary:hover:not(:disabled) { filter: brightness(1.1); }
     .primary:active:not(:disabled) { transform: translateY(1px); }
@@ -109,11 +112,19 @@
       border-radius: 10px; color: var(--danger);
     }
 
+    .tabs {
+      display: inline-flex; gap: 0.25rem; padding: 0.25rem; margin-bottom: 1.25rem;
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px;
+    }
+    .tab { background: transparent; color: var(--muted); padding: 0.45rem 1.1rem; border-radius: 9px; }
+    .tab:hover { color: var(--text); }
+    .tab[aria-selected="true"] { background: var(--surface); color: var(--text); border-color: var(--border); }
+
     .result-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
     .total-label { margin: 0; color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
     .total { margin: 0; font-family: var(--mono); font-size: 3rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; }
 
-    .categories { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+    .categories { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0.5rem; max-width: 36rem; }
     .category { display: grid; grid-template-columns: 2.25rem 1fr 3rem; align-items: center; gap: 0.75rem; }
     .letter {
       display: grid; place-items: center; height: 2.25rem; border-radius: 8px;
@@ -128,6 +139,26 @@
     }
     .count { text-align: right; font-family: var(--mono); font-weight: 600; }
 
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .toolbar .buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .vehicle { margin-top: 1.5rem; }
+    .vehicle-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .vehicle-head .ghost { margin-left: auto; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th, td { padding: 0.5rem 0.6rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    th { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; background: var(--surface-2); white-space: nowrap; }
+    td.time { font-family: var(--mono); white-space: nowrap; }
+    td.address { min-width: 14rem; }
+    td input {
+      width: 100%; min-width: 5rem; font: inherit; color: var(--text);
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.35rem 0.6rem;
+    }
+    td input:hover { border-color: var(--muted); }
+    td input.odometer { font-family: var(--mono); min-width: 5.5rem; }
+    td input.driver { min-width: 9rem; }
+
     @media (prefers-reduced-motion: reduce) {
       .spinner { animation: none; }
       .bar > span, button, .dropzone { transition: none; }
@@ -135,6 +166,17 @@
     @media (max-width: 30rem) {
       main { padding-top: 1.5rem; }
       .total { font-size: 2.5rem; }
+    }
+    @media print {
+      body { background: #fff; color: #000; }
+      header, #upload-card, .tabs, .toolbar, #panel-summary, .vehicle-head .ghost { display: none !important; }
+      #panel-vehicles { display: block !important; }
+      .card { border: 0; box-shadow: none; background: none; padding: 0; }
+      h3 { color: #000; }
+      .vehicle { break-inside: avoid; }
+      .table-wrap { border-color: #000; overflow: visible; }
+      th, td { border-color: #000; background: none; color: #000; }
+      td input { border: 0; background: none; color: #000; }
     }
   </style>
   <script
@@ -154,7 +196,7 @@
       </div>
     </header>
 
-    <section class="card" aria-label="Envio da planilha">
+    <section id="upload-card" class="card narrow" aria-label="Envio da planilha">
       <p id="status" class="status" role="status"><span class="spinner" aria-hidden="true"></span>Preparando o Python no navegador (só na primeira vez)…</p>
 
       <label id="dropzone" class="dropzone disabled">
@@ -176,19 +218,47 @@
       <p id="error" class="error" role="alert" hidden></p>
     </section>
 
-    <section id="result" class="card" aria-label="Resultado" aria-live="polite" hidden>
-      <div class="result-head">
-        <div>
-          <p class="total-label">Total</p>
-          <p id="total" class="total"></p>
-        </div>
-        <button id="copy" class="ghost" type="button">Copiar resumo</button>
+    <section id="results" class="card" aria-label="Resultado" hidden>
+      <div class="tabs" role="tablist" aria-label="Visões do resultado">
+        <button id="tab-summary" class="tab" type="button" role="tab" aria-controls="panel-summary" aria-selected="true">Resumo</button>
+        <button id="tab-vehicles" class="tab" type="button" role="tab" aria-controls="panel-vehicles" aria-selected="false" tabindex="-1">Viaturas</button>
       </div>
-      <ul id="categories" class="categories"></ul>
+
+      <div id="panel-summary" role="tabpanel" aria-labelledby="tab-summary">
+        <p id="summary-error" class="error" role="alert" hidden></p>
+        <div id="summary-content">
+          <div class="result-head">
+            <div>
+              <p class="total-label">Total</p>
+              <p id="total" class="total"></p>
+            </div>
+            <button id="copy" class="ghost" type="button" data-label="Copiar resumo">Copiar resumo</button>
+          </div>
+          <ul id="categories" class="categories"></ul>
+        </div>
+      </div>
+
+      <div id="panel-vehicles" role="tabpanel" aria-labelledby="tab-vehicles" hidden>
+        <p id="vehicles-error" class="error" role="alert" hidden></p>
+        <div id="vehicles-content">
+          <div class="toolbar">
+            <span id="vehicles-count" class="muted"></span>
+            <div class="buttons">
+              <button id="copy-all" class="ghost" type="button" data-label="Copiar tudo">Copiar tudo</button>
+              <button id="export-csv" class="ghost" type="button">Exportar CSV</button>
+              <button id="print" class="ghost" type="button">Imprimir</button>
+            </div>
+          </div>
+          <div id="vehicles"></div>
+        </div>
+      </div>
     </section>
   </main>
 
   <script>
+    const MODULES = ["csv_reader", "count", "vehicles"];
+    const TABLE_HEADERS = ["Hora saída", "Hora chegada", "Od. saída", "Od. chegada", "Endereço", "Motorista"];
+
     const status = document.getElementById("status");
     const dropzone = document.getElementById("dropzone");
     const fileInput = document.getElementById("file");
@@ -196,36 +266,64 @@
     const hint = document.getElementById("hint");
     const okButton = document.getElementById("ok");
     const error = document.getElementById("error");
-    const result = document.getElementById("result");
+    const results = document.getElementById("results");
+    const tabs = [...document.querySelectorAll(".tab")];
+    const summaryError = document.getElementById("summary-error");
+    const summaryContent = document.getElementById("summary-content");
     const totalOutput = document.getElementById("total");
     const categoriesOutput = document.getElementById("categories");
     const copyButton = document.getElementById("copy");
+    const vehiclesError = document.getElementById("vehicles-error");
+    const vehiclesContent = document.getElementById("vehicles-content");
+    const vehiclesCount = document.getElementById("vehicles-count");
+    const vehiclesOutput = document.getElementById("vehicles");
 
     let lastText = "";
+    let vehiclesState = [];
 
     async function loadSummary() {
       const pyodide = await loadPyodide();
-      const source = await (await fetch("summary/count.py")).text();
       pyodide.FS.mkdirTree("/home/pyodide/summary");
-      pyodide.FS.writeFile("/home/pyodide/summary/count.py", source);
+      await Promise.all(MODULES.map(async (name) => {
+        const response = await fetch(`summary/${name}.py`);
+        if (!response.ok) throw new Error(`summary/${name}.py: ${response.status}`);
+        pyodide.FS.writeFile(`/home/pyodide/summary/${name}.py`, await response.text());
+      }));
       pyodide.runPython(`
-from summary.count import NATURE_COLUMN, count_calls, format_summary
+from summary.count import count_calls, format_summary
+from summary.vehicles import group_by_vehicle
 
 
 def summarize(content):
     try:
         total, categories = count_calls(bytes(content.to_py()))
-    except KeyError:
-        return None
+    except KeyError as error:
+        return {"missing_column": error.args[0]}
     return {
         "text": format_summary(total, categories),
         "total": total,
         "categories": list(categories.items()),
     }
+
+
+def list_vehicles(content):
+    try:
+        grouped = group_by_vehicle(bytes(content.to_py()))
+    except KeyError as error:
+        return {"missing_column": error.args[0]}
+    return {
+        "vehicles": [
+            {
+                "vehicle": vehicle,
+                "trips": [[trip.departure, trip.arrival, trip.address] for trip in trips],
+            }
+            for vehicle, trips in grouped.items()
+        ]
+    }
 `);
       return {
         summarize: pyodide.globals.get("summarize"),
-        natureColumn: pyodide.globals.get("NATURE_COLUMN"),
+        listVehicles: pyodide.globals.get("list_vehicles"),
       };
     }
 
@@ -240,15 +338,54 @@ def summarize(content):
       console.error(failure);
     });
 
+    function toJs(proxy) {
+      const value = proxy.toJs({ dict_converter: Object.fromEntries });
+      proxy.destroy();
+      return value;
+    }
+
     function formatSize(bytes) {
       return bytes < 1024 * 1024
         ? `${Math.max(1, Math.round(bytes / 1024))} KB`
         : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
 
+    function flash(button, message) {
+      button.textContent = message;
+      setTimeout(() => { button.textContent = button.dataset.label; }, 1800);
+    }
+
+    async function copyText(button, text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        flash(button, "Copiado");
+      } catch {
+        flash(button, "Não foi possível copiar");
+      }
+    }
+
+    function selectTab(name) {
+      for (const tab of tabs) {
+        const selected = tab.id === `tab-${name}`;
+        tab.setAttribute("aria-selected", selected);
+        tab.tabIndex = selected ? 0 : -1;
+        document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
+      }
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => selectTab(tab.id.replace("tab-", "")));
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        const next = tabs[(index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length];
+        next.focus();
+        next.click();
+      });
+    });
+
     function resetOutput() {
       error.hidden = true;
-      result.hidden = true;
+      results.hidden = true;
     }
 
     fileInput.addEventListener("change", () => {
@@ -281,7 +418,9 @@ def summarize(content):
       fileInput.dispatchEvent(new Event("change"));
     });
 
-    function render(summary) {
+    function renderSummary(summary) {
+      summaryError.hidden = true;
+      summaryContent.hidden = false;
       lastText = summary.text;
       totalOutput.textContent = summary.total;
       categoriesOutput.replaceChildren(...summary.categories.map(([letter, amount]) => {
@@ -294,33 +433,138 @@ def summarize(content):
         item.querySelector(".bar > span").style.width = `${(amount / summary.total) * 100}%`;
         return item;
       }));
-      result.hidden = false;
+    }
+
+    function toTableRows(vehicles, withVehicle) {
+      const header = withVehicle ? ["Viatura", ...TABLE_HEADERS] : TABLE_HEADERS;
+      const body = vehicles.flatMap(({ vehicle, trips }) => trips.map((trip) => {
+        const cells = [trip.departure, trip.arrival, trip.odometerOut, trip.odometerIn, trip.address, trip.driver];
+        return withVehicle ? [vehicle, ...cells] : cells;
+      }));
+      return [header, ...body];
+    }
+
+    function toTsv(rows) {
+      return rows.map((row) => row.map((cell) => cell.replace(/[\t\r\n]+/g, " ")).join("\t")).join("\n");
+    }
+
+    function toCsv(rows) {
+      const field = (cell) => (/[";\r\n]/.test(cell) ? `"${cell.replaceAll('"', '""')}"` : cell);
+      return rows.map((row) => row.map(field).join(";")).join("\r\n");
+    }
+
+    function buildInput(trip, key, label, className, inputMode) {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = className;
+      input.value = trip[key];
+      input.autocomplete = "off";
+      if (inputMode) input.inputMode = inputMode;
+      input.setAttribute("aria-label", label);
+      input.addEventListener("input", () => { trip[key] = input.value; });
+      return input;
+    }
+
+    function buildCell(className, content) {
+      const cell = document.createElement("td");
+      if (className) cell.className = className;
+      cell.append(content);
+      return cell;
+    }
+
+    function buildVehicle(group) {
+      const section = document.createElement("section");
+      section.className = "vehicle";
+      section.innerHTML = '<div class="vehicle-head"><h3></h3><span class="muted"></span><button class="ghost" type="button" data-label="Copiar">Copiar</button></div>'
+        + '<div class="table-wrap"><table><thead><tr></tr></thead><tbody></tbody></table></div>';
+      section.querySelector("h3").textContent = group.vehicle;
+      section.querySelector(".muted").textContent = group.trips.length === 1 ? "1 atendimento" : `${group.trips.length} atendimentos`;
+      section.querySelector("button").addEventListener("click", (event) => {
+        copyText(event.currentTarget, toTsv(toTableRows([group], false)));
+      });
+      section.querySelector("thead tr").replaceChildren(...TABLE_HEADERS.map((title) => {
+        const header = document.createElement("th");
+        header.scope = "col";
+        header.textContent = title;
+        return header;
+      }));
+      section.querySelector("tbody").replaceChildren(...group.trips.map((trip) => {
+        const context = `${group.vehicle}, ${trip.departure}`;
+        const row = document.createElement("tr");
+        row.append(
+          buildCell("time", trip.departure),
+          buildCell("time", trip.arrival),
+          buildCell("", buildInput(trip, "odometerOut", `Od. saída, ${context}`, "odometer", "numeric")),
+          buildCell("", buildInput(trip, "odometerIn", `Od. chegada, ${context}`, "odometer", "numeric")),
+          buildCell("address", trip.address),
+          buildCell("", buildInput(trip, "driver", `Motorista, ${context}`, "driver")),
+        );
+        return row;
+      }));
+      return section;
+    }
+
+    function renderVehicles(data) {
+      vehiclesError.hidden = true;
+      vehiclesContent.hidden = false;
+      vehiclesState = data.vehicles.map(({ vehicle, trips }) => ({
+        vehicle,
+        trips: trips.map(([departure, arrival, address]) => (
+          { departure, arrival, address, odometerOut: "", odometerIn: "", driver: "" }
+        )),
+      }));
+      const tripCount = vehiclesState.reduce((sum, group) => sum + group.trips.length, 0);
+      vehiclesCount.textContent = vehiclesState.length === 0
+        ? "Nenhuma chamada com viatura nesta planilha."
+        : `${vehiclesState.length} ${vehiclesState.length === 1 ? "viatura" : "viaturas"} · ${tripCount} atendimentos`;
+      vehiclesOutput.replaceChildren(...vehiclesState.map(buildVehicle));
+    }
+
+    function showMissingColumn(errorElement, contentElement, column) {
+      errorElement.textContent = `Coluna ${column} não encontrada.`;
+      errorElement.hidden = false;
+      contentElement.hidden = true;
     }
 
     okButton.addEventListener("click", async () => {
-      const { summarize, natureColumn } = await summaryReady;
-      const content = new Uint8Array(await fileInput.files[0].arrayBuffer());
-      const raw = summarize(content);
       resetOutput();
-      if (raw === undefined) {
-        error.textContent = `Coluna ${natureColumn} não encontrada.`;
+      try {
+        const { summarize, listVehicles } = await summaryReady;
+        const content = new Uint8Array(await fileInput.files[0].arrayBuffer());
+        const summary = toJs(summarize(content));
+        const vehicles = toJs(listVehicles(content));
+        if (summary.missing_column) {
+          showMissingColumn(summaryError, summaryContent, summary.missing_column);
+        } else {
+          renderSummary(summary);
+        }
+        if (vehicles.missing_column) {
+          showMissingColumn(vehiclesError, vehiclesContent, vehicles.missing_column);
+        } else {
+          renderVehicles(vehicles);
+        }
+        results.hidden = false;
+        selectTab("summary");
+      } catch (failure) {
+        console.error(failure);
+        error.textContent = "Não foi possível processar a planilha.";
         error.hidden = false;
-        return;
       }
-      const summary = raw.toJs({ dict_converter: Object.fromEntries });
-      raw.destroy();
-      render(summary);
     });
 
-    copyButton.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(lastText);
-        copyButton.textContent = "Copiado";
-      } catch {
-        copyButton.textContent = "Não foi possível copiar";
-      }
-      setTimeout(() => { copyButton.textContent = "Copiar resumo"; }, 1800);
+    copyButton.addEventListener("click", () => copyText(copyButton, lastText));
+    document.getElementById("copy-all").addEventListener("click", (event) => {
+      copyText(event.currentTarget, toTsv(toTableRows(vehiclesState, true)));
     });
+    document.getElementById("export-csv").addEventListener("click", () => {
+      const file = new Blob(["﻿", toCsv(toTableRows(vehiclesState, true))], { type: "text/csv;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(file);
+      link.download = "viaturas.csv";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+    document.getElementById("print").addEventListener("click", () => window.print());
   </script>
 </body>
 </html>

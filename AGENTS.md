@@ -22,6 +22,20 @@ Duas páginas chamam a mesma lógica de `summary/`:
   Sem significado das letras.
 - As categorias aparecem em ordem alfabética.
 
+## Regra de negócio: atendimentos por viatura
+
+- Fonte: a mesma planilha do CAD, só na `index.html` (aba Viaturas).
+- Viatura vem da coluna `Recursos empenhados`. Vários recursos na mesma chamada
+  vêm separados por `/`; a chamada aparece uma vez para cada recurso.
+- Chamada sem recurso é ignorada nesta saída (e continua contando no resumo).
+- Colunas: hora saída (`Data/hora de criação`), hora chegada
+  (`Data/hora da situação atual`), od. saída e od. chegada (vazios), endereço
+  (`Local do fato`) e motorista (vazio). Data e hora aparecem juntas.
+- Viaturas em ordem alfabética; atendimentos de cada viatura em ordem
+  cronológica de saída.
+- Od. saída, od. chegada e motorista são preenchidos na página, que oferece
+  copiar, exportar CSV e imprimir. Nada disso sai do navegador.
+
 ## Verificação
 
 - `ruff check .` para estilo.
@@ -42,7 +56,8 @@ Duas páginas chamam a mesma lógica de `summary/`:
 - A lógica de contagem não depende do Streamlit nem do navegador. As páginas só
   chamam a lógica; a regra existe só em `summary/`.
 - Nomes no código (arquivos, funções, variáveis, testes) em inglês; interface e documentação em português.
-- Exceção: `Natureza` é o nome da coluna do CSV do CAD e não muda.
+- Exceção: os nomes das colunas do CSV do CAD (`Natureza`, `Recursos empenhados`,
+  `Data/hora de criação` etc.) ficam como vêm na planilha.
 
 ## Fronteiras
 
