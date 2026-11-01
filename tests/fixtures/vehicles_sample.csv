@@ -1,0 +1,5 @@
+Nº chamada;Nº REDS;Data/hora de criação;Local do fato;Latitude  do local;Longitude do local;Natureza;Unidade Responsável;Recursos empenhados;Alerta;Destaque;Envolve autoridade;Tipo de classificação;Situação;Data/hora da situação atual;Evento associado
+TESTE-0;;01/01/2026 08:00;RUA TESTE UM, Nº 1 - BAIRRO TESTE;;;P00001 - TESTE;UNIDADE TESTE;AAA0001;Não;Não;Não;CLASSIFICACAO TESTE;Classificada;03/01/2026 09:00;Não
+TESTE-0;;01/01/2026 06:30;RUA TESTE DOIS, Nº 2 - BAIRRO TESTE;;;V00001 - TESTE;UNIDADE TESTE;AAA0001 / BBB0002;Não;Não;Não;CLASSIFICACAO TESTE;Classificada;03/01/2026 09:00;Não
+TESTE-0;;02/01/2026 10:15;RUA TESTE TRES, Nº 3 - BAIRRO TESTE;;;A00001 - TESTE;UNIDADE TESTE;;Não;Não;Não;CLASSIFICACAO TESTE;Classificada;03/01/2026 09:00;Não
+TESTE-0;;02/01/2026 11:00;RUA TESTE QUATRO, Nº 4 - BAIRRO TESTE;;;V00002 - TESTE;UNIDADE TESTE;BBB0002;Não;Não;Não;CLASSIFICACAO TESTE;Classificada;03/01/2026 09:01;Não

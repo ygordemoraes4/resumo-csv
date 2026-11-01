@@ -1,16 +1,12 @@
-import csv
-import io
 from collections import Counter
 
-ENCODING = "cp1252"
-SEPARATOR = ";"
+from summary.csv_reader import read_rows
+
 NATURE_COLUMN = "Natureza"
 
 
 def count_calls(content: bytes) -> tuple[int, dict[str, int]]:
-    text = content.decode(ENCODING)
-    reader = csv.DictReader(io.StringIO(text, newline=""), delimiter=SEPARATOR)
-    categories = Counter(row[NATURE_COLUMN][0].upper() for row in reader)
+    categories = Counter(row[NATURE_COLUMN][0].upper() for row in read_rows(content))
     return categories.total(), dict(sorted(categories.items()))
 
 
