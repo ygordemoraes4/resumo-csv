@@ -1,0 +1,17 @@
+# Ambiente virtual
+.venv/
+
+# Caches do Python, pytest e ruff
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Planilhas reais do CAD (endereço e coordenadas de ocorrências)
+data/bruto/
+*.csv
+!tests/fixtures/*.csv
+
+# Configuração local do Claude Code
+CLAUDE.local.md
+.claude/settings.local.json
