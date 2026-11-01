@@ -25,13 +25,14 @@ do Corpo de Bombeiros e mostra o consolidado. Uso diário, por uma pessoa.
 
 - Planilhas reais do CAD trazem endereço e coordenadas de ocorrências.
 - Nunca leia, copie, commite nem coloque dado real em teste, log ou mensagem de commit.
-- Planilhas reais ficam em `data/bruto/`, fora do Git.
+- Planilhas reais ficam em `data/raw/`, fora do Git.
 - Testes usam só arquivos fictícios em `tests/fixtures/`.
 
 ## Convenções
 
 - A lógica de contagem não depende do Streamlit. A página só chama a lógica.
-- Nomes de domínio em português; nomes técnicos em inglês.
+- Nomes no código (arquivos, funções, variáveis, testes) em inglês; interface e documentação em português.
+- Exceção: `Natureza` é o nome da coluna do CSV do CAD e não muda.
 
 ## Fronteiras
 

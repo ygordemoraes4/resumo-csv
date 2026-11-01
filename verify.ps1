@@ -1,4 +1,3 @@
-# Gate de verificacao: roda ruff e pytest e para no primeiro erro.
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 

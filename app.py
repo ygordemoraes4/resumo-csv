@@ -1,15 +1,15 @@
 import streamlit as st
 
-from resumo.contagem import COLUNA_NATUREZA, contar_chamadas, formatar_resumo
+from summary.count import NATURE_COLUMN, count_calls, format_summary
 
 st.title("Resumo de chamadas")
 
-arquivo = st.file_uploader("Planilha do CAD (.csv)", type="csv")
+uploaded_file = st.file_uploader("Planilha do CAD (.csv)", type="csv")
 
-if st.button("OK", disabled=arquivo is None):
+if st.button("OK", disabled=uploaded_file is None):
     try:
-        total, categorias = contar_chamadas(arquivo.getvalue())
+        total, categories = count_calls(uploaded_file.getvalue())
     except KeyError:
-        st.error(f"Coluna {COLUNA_NATUREZA} não encontrada.")
+        st.error(f"Coluna {NATURE_COLUMN} não encontrada.")
     else:
-        st.code(formatar_resumo(total, categorias), language=None)
+        st.code(format_summary(total, categories), language=None)

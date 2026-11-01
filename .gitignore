@@ -8,7 +8,7 @@ __pycache__/
 .ruff_cache/
 
 # Planilhas reais do CAD (endereço e coordenadas de ocorrências)
-data/bruto/
+data/raw/
 *.csv
 !tests/fixtures/*.csv
 
